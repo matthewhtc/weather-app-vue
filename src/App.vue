@@ -22,8 +22,8 @@
 
       <div class="buttons has-addons level is-mobile">
         <div class="level-item has-text-centered">
-          <a class="button title is-6" v-on:click="convert" v-bind:disabled="!isCelsius">°C</a>
-          <a class="button title is-6" v-on:click="convert" v-bind:disabled="isCelsius">°F</a>
+          <a class="button title is-6" v-on:click="convert" v-bind:disabled="isCelsius">°C</a>
+          <a class="button title is-6" v-on:click="convert" v-bind:disabled="!isCelsius">°F</a>
         </div>
       </div>
 
@@ -115,7 +115,7 @@ export default {
         this.latitude = json.data.latitude; 
         this.longitude = json.data.longitude; 
         this.weatherURL = this.weatherURL + this.latitude + '&lon=' + this.longitude; 
-        
+        console.log(this.weatherURL); 
         return axios.get(this.weatherURL); 
       })
       .then((json) => {
@@ -135,7 +135,7 @@ $mobile: 768px;
 $fullscreen: 1024px; 
 
 .card {
-  width: 300px; 
+  width: 340px; 
   margin: 90px auto; 
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
@@ -158,7 +158,7 @@ i {
 }
 @media (max-width: $mobile) {
   .card {
-    width: 70%; 
+    width: 85%; 
   }
 }
 </style>
