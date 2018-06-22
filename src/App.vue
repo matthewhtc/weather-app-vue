@@ -1,4 +1,5 @@
 <template>
+  <transition name="fade">
   <div class='card has-text-centered' v-bind:style="{ backgroundColor: color }">
 
     <div class="card-content">
@@ -7,18 +8,28 @@
     
     <div class="card-content">
       <p class="title is-4">{{ info.name }}</p>
-      <p class="subtitle">{{ getDescription }} - {{ temperature }}°C</p>
+      <p class="subtitle">{{ getDescription }} - {{ temperature }}{{ type }}</p>
       
       <div class="columns">
         <p class="column">High of: </p>
-        <p class="column">{{ info.main.temp_max }}°C</p>
+        <p class="column">{{ max }}{{ type }}</p>
       </div>
       <div class="columns">
         <p class="column">Low of: </p>
-        <p class="column">{{ info.main.temp_min }}°C</p>
+        <p class="column">{{ min }}{{ type }}</p>
       </div> 
+
+      
+      <div class="buttons has-addons level is-mobile">
+        <div class="level-item has-text-centered">
+          <a class="button title is-6" v-on:click="convert" v-bind:disabled="!isCelsius">°C</a>
+          <a class="button title is-6" v-on:click="convert" v-bind:disabled="isCelsius">°F</a>
+        </div>
+      </div>
+
     </div> <!-- card-content-->
   </div> 
+  </transition>
 </template>
 
 <script>
@@ -36,9 +47,12 @@ export default {
       longitude: null, 
       weatherURL: 'https://fcc-weather-api.glitch.me/api/current?lat=',
       isCelsius: true, 
-      description: '', 
       main: '', 
-      color: ''
+      color: '', 
+      temperature: 0, 
+      min: 0, 
+      max: 0 ,
+      type: "°C"
     } 
   }, 
 
@@ -47,39 +61,51 @@ export default {
       return this.info.weather[0].description; 
     }, 
     getIcon() {
-      console.log('hello'); 
       switch (this.main) {
         case 'drizzle':
           this.color = '#b7d3ff'; 
-          break;
+          return "fas fa-tint"; 
+          
         case 'clouds':
           this.color = '#eaebed'; 
-          
           return "fas fa-cloud"; 
           
         case 'rain':
+          this.color = '#b7d3ff'; 
+          return 'fas fa-umbrella'; 
           
-          break;
         case 'snow':
+          this.color = 'white'; 
+          return "fas fa-snowflake"; 
           
-          break;
         case 'clear':
-          console.log(this.weatherURL); 
           this.color = '#ffe47c'; 
           return "fas fa-sun"; 
           
           
         case 'thunderstom':
-          
-          break; 
+        this.color = '#609dff'; 
+          return "fas fa-bolt"; 
       }
     }
   }, 
 
   methods: {
-    convert: function() {
-
-    } 
+    convert() {
+      if (this.isCelsius) {
+        this.temperature = Math.floor(this.temperature*1.8 + 32);
+        this.max = Math.floor(this.max*1.8 + 32);
+        this.min = Math.floor(this.min*1.8 + 32);
+        this.isCelsius = false;
+        this.type = "°F"; 
+      } else {
+        this.temperature = Math.floor((this.temperature - 32)*(5/9));
+        this.max = Math.floor((this.max - 32)*(5/9));
+        this.min = Math.floor((this.min - 32)*(5/9));
+        this.isCelsius = true;
+        this.type = "°C"; 
+      }
+    },
   },
   created() {
     axios
@@ -97,27 +123,36 @@ export default {
         console.log(this.info); 
         this.temperature = this.info.main.temp; 
         this.main = this.info.weather[0].main.toLowerCase(); 
+        this.min = this.info.main.temp_min; 
+        this.max = this.info.main.temp_max; 
       }); 
   }
 }
 </script>
 
 <style lang="scss">
-
 $mobile: 768px; 
 
 .card {
-  width: 30%; 
+  width: 25%; 
   margin: 90px auto; 
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
 i {
   font-size: 100px; 
 }
 
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
 @media (max-width: $mobile) {
   .card {
-    width: 80%; 
+    width: 70%; 
   }
 }
 </style>
