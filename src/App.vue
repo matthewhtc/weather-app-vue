@@ -14,12 +14,12 @@
         <p class="column">High of: </p>
         <p class="column">{{ max }}{{ type }}</p>
       </div>
+
       <div class="columns">
         <p class="column">Low of: </p>
         <p class="column">{{ min }}{{ type }}</p>
       </div> 
 
-      
       <div class="buttons has-addons level is-mobile">
         <div class="level-item has-text-centered">
           <a class="button title is-6" v-on:click="convert" v-bind:disabled="!isCelsius">°C</a>
@@ -41,17 +41,17 @@ export default {
 
   data () {
     return {
-      icon: 'fas fa-umbrella', 
+      icon: 'fas fa-sun', 
       info: null, 
       latitude: null, 
       longitude: null, 
       weatherURL: 'https://fcc-weather-api.glitch.me/api/current?lat=',
       isCelsius: true, 
       main: '', 
-      color: '', 
+      color: 'white', 
       temperature: 0, 
       min: 0, 
-      max: 0 ,
+      max: 0,
       type: "°C"
     } 
   }, 
@@ -82,7 +82,6 @@ export default {
           this.color = '#ffe47c'; 
           return "fas fa-sun"; 
           
-          
         case 'thunderstom':
         this.color = '#609dff'; 
           return "fas fa-bolt"; 
@@ -107,6 +106,7 @@ export default {
       }
     },
   },
+  
   created() {
     axios
       .get('https://ipapi.co/json')
