@@ -132,9 +132,10 @@ export default {
 
 <style lang="scss">
 $mobile: 768px; 
+$fullscreen: 1024px; 
 
 .card {
-  width: 25%; 
+  width: 300px; 
   margin: 90px auto; 
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
@@ -150,6 +151,11 @@ i {
   opacity: 0;
 }
 
+@media (max-width: $fullscreen) {
+  .card {
+    width: 35%; 
+  }
+}
 @media (max-width: $mobile) {
   .card {
     width: 70%; 
