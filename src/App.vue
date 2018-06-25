@@ -105,19 +105,20 @@ export default {
         this.type = "°C"; 
       }
     },
-  },
-  
-  created() {
-    axios
+    getIPInfo() {
+      axios
       .get('https://ipapi.co/json')
       .then(json => {
-        
         this.latitude = json.data.latitude; 
         this.longitude = json.data.longitude; 
         this.weatherURL = this.weatherURL + this.latitude + '&lon=' + this.longitude; 
         console.log(this.weatherURL); 
-        return axios.get(this.weatherURL); 
+        // 
+        this.getWeatherInfo();
       })
+    },
+    getWeatherInfo() {
+      axios.get(this.weatherURL)
       .then((json) => {
         this.info = json.data; 
         console.log(this.info); 
@@ -126,6 +127,29 @@ export default {
         this.min = this.info.main.temp_min; 
         this.max = this.info.main.temp_max; 
       }); 
+    }
+  },
+  
+  created() {
+    this.getIPInfo(); 
+    // axios
+    //   .get('https://ipapi.co/json')
+    //   .then(json => {
+        
+    //     this.latitude = json.data.latitude; 
+    //     this.longitude = json.data.longitude; 
+    //     this.weatherURL = this.weatherURL + this.latitude + '&lon=' + this.longitude; 
+    //     console.log(this.weatherURL); 
+    //     return axios.get(this.weatherURL); 
+    //   })
+    //   .then((json) => {
+    //     this.info = json.data; 
+    //     console.log(this.info); 
+    //     this.temperature = this.info.main.temp; 
+    //     this.main = this.info.weather[0].main.toLowerCase(); 
+    //     this.min = this.info.main.temp_min; 
+    //     this.max = this.info.main.temp_max; 
+    //   }); 
   }
 }
 </script>
